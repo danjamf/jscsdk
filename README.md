@@ -1,14 +1,17 @@
 Just a quick test on JSC automation
 
-Usage ```git clone https://github.com/danjamf/jscsdk.git```
+Usage `git clone https://github.com/danjamf/jscsdk.git`
 
-Example usage 
+Example usage
+
 ```
 import jscsdk
 
 client = jscsdk.client("radar.wandera.com", "myuser@company.com", "mypassword")
 
 print (client.uemc.sync())
+print (client.idp.add("OKTA", "testname", "0oaal7sr2ZeAQVEji5d6", "www.test.com"))
+
 
 print (client.customThreatLists.get())
 print (client.customThreatLists.replace(['www.changed.com', 'nick321.com', "newdomain.com"], 'Block', 'Phishing'))
