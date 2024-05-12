@@ -2,6 +2,7 @@ from . import restclient
 from . import customthreat
 from . import ztna
 from . import uemc
+from . import idp
 import logging
 
 
@@ -15,6 +16,7 @@ class JSC:
         self.customThreatLists = self.ctclass(self.creds)
         self.ztna = self.ztnaclass(self.creds)
         self.uemc = self.uemcclass(self.creds)
+        self.idp = self.idpclass(self.creds)
         logging.basicConfig(level=loglevel, format='%(asctime)s - %(levelname)s - %(message)s')
         self.logging = logging.getLogger(__name__)
         self.logging.info  ("auth completed")
@@ -54,6 +56,14 @@ class JSC:
             return(self.customthreat.replaceCustomThreats(domains, action, threat_type, self.creds))
         def get(self):
             return (self.customthreat.getCustomThreats(self.creds))
+
+
+    class idpclass:
+        def __init__(self, creds) -> None:
+            self.idpimport = idp
+            self.creds = creds
+        def add(self, type, name, clientId, orgDomain):
+            return(self.idpimport.addIDP(type, name, clientId, orgDomain, self.creds))
 
 
 
