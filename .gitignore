@@ -2,5 +2,6 @@
 /.pytest_cache
 /JSCSDK.egg-info
 /__pycache__
-sdk/__pycache__/*
+/sdk/__pycache__/*
 *__pycache__*
+sdk/__pycache__*
