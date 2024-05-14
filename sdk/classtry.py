@@ -16,7 +16,8 @@ class JSC:
         self.ztna = self.ztnaclass(self.creds)
         self.uemc = self.uemcclass(self.creds)
         self.idp = self.idpclass(self.creds)
-        logging.basicConfig(level=loglevel, format='%(asctime)s - %(levelname)s - %(message)s')
+        logging.basicConfig(
+            level=loglevel, format='%(asctime)s - %(levelname)s - %(message)s')
         self.logging = logging.getLogger(__name__)
         self.logging.info("auth completed")
 
@@ -74,7 +75,8 @@ class JSC:
 # just for local testing
 if __name__ == "__main__":
     client = JSC("radar.wandera.com", "auth@myauth.com", "mypass")
-    print(client.customThreatLists.replaceCustomThreats(['www.secondclass.com', 'nick321.com', "newdomain.com"], 'Block', 'Phishing'))
+    print(client.customThreatLists.replaceCustomThreats(
+        ['www.secondclass.com', 'nick321.com', "newdomain.com"], 'Block', 'Phishing'))
     hold = client.customThreatLists.getCustomThreats()
     print(hold)
     print(client.ztna.listRoutes())
