@@ -27,7 +27,10 @@ class JSC:
             self.uemcimport = uemc
 
         def create(self, domain, clientId, clientSecret):
-            return (self.uemcimport.create_uemc(domain, clientId, clientSecret, self.creds))
+            return (self.uemcimport.create_uemc(domain,
+                                                clientId,
+                                                clientSecret,
+                                                self.creds))
 
         def sync(self):
             return (self.uemcimport.sync_uemc(self.creds))
@@ -41,7 +44,10 @@ class JSC:
             return (self.ztnamimport.list_routes(self.creds))
 
         def createApp(self, appname, domains, routeid):
-            return (self.ztnamimport.create_app(appname, domains, routeid, self.creds))
+            return (self.ztnamimport.create_app(appname,
+                                                domains,
+                                                routeid,
+                                                self.creds))
 
         def validateHostname(self, domain):
             return (self.ztnamimport.validate_hostname(domain, self.creds))
@@ -58,7 +64,10 @@ class JSC:
             self.creds = creds
 
         def replace(self, domains, action, threat_type):
-            return self.customthreat.replaceCustomThreats(domains, action, threat_type, self.creds)
+            return self.customthreat.replaceCustomThreats(domains,
+                                                          action,
+                                                          threat_type,
+                                                          self.creds)
 
         def get(self):
             return (self.customthreat.getCustomThreats(self.creds))
@@ -69,14 +78,19 @@ class JSC:
             self.creds = creds
 
         def add(self, type, name, clientId, orgDomain):
-            return (self.idpimport.addIDP(type, name, clientId, orgDomain, self.creds))
+            return (self.idpimport.addIDP(type,
+                                          name,
+                                          clientId,
+                                          orgDomain,
+                                          self.creds))
 
 
 # just for local testing
 if __name__ == "__main__":
     client = JSC("radar.wandera.com", "auth@myauth.com", "mypass")
     print(client.customThreatLists.replaceCustomThreats(
-        ['www.secondclass.com', 'nick321.com', "newdomain.com"], 'Block', 'Phishing'))
+        ['www.secondclass.com', 'nick321.com', "newdomain.com"],
+        'Block', 'Phishing'))
     hold = client.customThreatLists.getCustomThreats()
     print(hold)
     print(client.ztna.listRoutes())

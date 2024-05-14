@@ -12,7 +12,8 @@ def replaceCustomThreats(domains, action, category, creds):
     creds['payload'] = payloadoutput
 
     response = restclient.sendRest(
-        "PUT", "/api/settings/custom_threat_intelligence/import?customerId=", "&importerId=admin@jscsdk.com", creds)
+        "PUT", "/api/settings/custom_threat_intelligence/import?customerId=",
+        "&importerId=admin@jscsdk.com", creds)
     if response.status_code == 200:
         return response
     else:
@@ -30,7 +31,8 @@ def appendCustomThreats(domains, action, category, creds):
     creds['payload'] = payloadoutput
     logging.debug(payloadoutput)
     response = restclient.sendRest(
-        "PUT", "/api/settings/custom_threat_intelligence/import?customerId=", "&importerId=admin@jscsdk.com", creds)
+        "PUT", "/api/settings/custom_threat_intelligence/import?customerId=",
+        "&importerId=admin@jscsdk.com", creds)
     if response.status_code == 200:
         return response
     else:
@@ -40,7 +42,9 @@ def appendCustomThreats(domains, action, category, creds):
 def getCustomThreats(creds):
     logging.debug("Attempting to get existing custom threats")
     output = restclient.sendRest(
-        "GET", "/api/settings/custom_threat_intelligence/resources?customerId=", "", creds)  # todo add pagination
+        "GET",
+        "/api/settings/custom_threat_intelligence/resources?customerId=",
+        "", creds)  # todo add pagination
     records = json.loads(output.text)
     outputlist = []
     for record in records["records"]:
