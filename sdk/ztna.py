@@ -2,37 +2,40 @@ from . import restclient
 import json
 import logging
 
+
 def validate_hostname(domain, creds):
 
     logging.debug('Attempting to validate domain '+domain)
     basevalidateconfig = '{"hostname":"'+domain+'"}'
     creds['payload'] = basevalidateconfig
     postresponse = restclient.sendRest("POST", "/gate/traffic-routing-service/v2/apps/hostnames/validate?customerId=", "", creds)
-    #print (postresponse.text)
+    # print (postresponse.text)
     x = json.loads(postresponse.text)
     if (x['conflict'] == "NONE"):
-        logging.info ("No Conflict")
+        logging.info("No Conflict")
     else:
-        logging.error ("Possible domain conflict")
-        logging.error (x['messageParams'])
+        logging.error("Possible domain conflict")
+        logging.error(x['messageParams'])
     return postresponse
+
 
 def list_routes(creds):
     logging.debug('Attempting to list all VPN Routes')
     routesresponse = restclient.sendRest('GET', '/api/gateways/vpn-routes?customerId=', '&view=deployments_with_status', creds)
 
-    #routesresponse = requests.get('https://' + radar_domain + '/api/gateways/vpn-routes?customerId='+customerid+'&view=deployments_with_status', headers=headers, cookies = cookies)
-    logging.debug (routesresponse.text)
+    # routesresponse = requests.get('https://' + radar_domain + '/api/gateways/vpn-routes?customerId='+customerid+'&view=deployments_with_status', headers=headers, cookies = cookies)
+    logging.debug(routesresponse.text)
     routesjson = json.loads(routesresponse.text)
-    logging.debug (len(routesjson))
+    logging.debug(len(routesjson))
     return (routesjson)
+
 
 def list_apps(creds):
     logging.debug('Attempting to list all App ZTNA Routes')
     appsresponse = restclient.sendRest('GET', '/api/app-definitions/list?customerId=', '', creds)
-    logging.debug (appsresponse.text)
+    logging.debug(appsresponse.text)
     appsjson = json.loads(appsresponse.text)
-    logging.debug (len(appsjson))
+    logging.debug(len(appsjson))
     return (appsjson)
 
 
@@ -40,39 +43,40 @@ def find_routes(matchid, creds):
     logging.debug('Attempting to list all VPN Routes')
     routesresponse = restclient.sendRest('GET', '/api/gateways/vpn-routes?customerId=', '&view=deployments_with_status', creds)
 
-    #routesresponse = requests.get('https://' + radar_domain + '/api/gateways/vpn-routes?customerId='+customerid+'&view=deployments_with_status', headers=headers, cookies = cookies)
-    logging.debug (routesresponse.text)
+    # routesresponse = requests.get('https://' + radar_domain + '/api/gateways/vpn-routes?customerId='+customerid+'&view=deployments_with_status', headers=headers, cookies = cookies)
+    logging.debug(routesresponse.text)
     routesjson = json.loads(routesresponse.text)
-    logging.debug (len(routesjson))
+    logging.debug(len(routesjson))
     for x in routesjson:
-        logging.debug (x['name'])
+        logging.debug(x['name'])
         if (matchid in (x['name'])):
-            logging.debug ('Found routeID: ' +x['id'])
+            logging.debug('Found routeID: ' + x['id'])
             return x['id']
 
 
 def delete_app(appid, appname, creds):
-    logging.debug ('Delete app id ' +appid)
-    routesresponse = restclient.sendRest('DELETE', '/api/app-definitions/'+appid+'?customerId=', '&appName=' + appname, creds)
+    logging.debug('Delete app id ' + appid)
+    routesresponse = restclient.sendRest('DELETE', '/api/app-definitions/' + appid + '?customerId=', '&appName=' + appname, creds)
     return (routesresponse)
 
+
 def create_app(appname, domains, routeid, creds):
-    logging.debug ('Creating app config for domains on routeid ' +routeid)
+    logging.debug('Creating app config for domains on routeid ' +routeid)
     baseappconfig = json.loads('{"type":"ENTERPRISE","name":"'+appname+'","categoryName":"Uncategorized","hostnames":["testetestset.com"],"bareIps":[],"routing":{"type":"CUSTOM","routeId":"b226","dnsIpResolutionType":"IPv6"},"assignments":{"inclusions":{"allUsers":true,"groups":[]}},"security":{"riskControls":{"enabled":false,"levelThreshold":"HIGH","notificationsEnabled":true},"dohIntegration":{"blocking":false,"notificationsEnabled":true},"deviceManagementBasedAccess":{"enabled":false,"notificationsEnabled":true}}}')
-    logging.debug ('attempting to modify: ' + baseappconfig['hostnames'][0])
+    logging.debug('attempting to modify: ' + baseappconfig['hostnames'][0])
     for index, domain in enumerate(domains):
-        if index == 0: #bit of a hack. Swap out the first one, but for any other we append
+        if index == 0:  # bit of a hack. Swap out the first one, but for any other we append
             baseappconfig['hostnames'][index] = domain
         else:
             baseappconfig['hostnames'].append(domain)
-    logging.debug ('attempting to modify: ' + baseappconfig['routing']['routeId'])
+    logging.debug('attempting to modify: ' + baseappconfig['routing']['routeId'])
     baseappconfig['routing']['routeId'] = routeid
-    logging.debug ('new config: ' + json.dumps(baseappconfig))
+    logging.debug('new config: ' + json.dumps(baseappconfig))
     baseappconfig = json.dumps(baseappconfig)
     creds['payload'] = baseappconfig
     postresponse = restclient.sendRest('POST' , '/api/app-definitions?customerId=', '&appName=' + appname, creds)
 
-    logging.debug (postresponse.text)
+    logging.debug(postresponse.text)
     return (postresponse)
 
 
@@ -86,7 +90,7 @@ def vpn_config_modify(deploymentcorejson):
     print (vpnjson['deployment']['components']['vpnRouter']['tunnel']['ipsec']['right']['host'])
     print (json.dumps(vpnjson))
     return json.dumps(vpnjson)
- 
+
 
 
 
@@ -115,9 +119,7 @@ def update_vpn(customerid, cookies, headers):
     print (deploymentcorejson)
     #print (vpn_config_modify(deploymentcorejson))
     print ('here is the extracted vpn-route ID:')
-    print (deploymentcorejson['id'])
-  
-    
+    print (deploymentcorejson['id']) 
     updatevpnpage = requests.patch('https://' + radar_domain + '/api/gateways/vpn-routes/'+deploymentcorejson['id']+'?customerId=' + customerid, data = (vpn_config_modify(deploymentcorejson)), headers=headers, cookies = cookies)                                   
     print (updatevpnpage)
 '''
