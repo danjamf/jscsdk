@@ -37,7 +37,7 @@ def appendCustomThreats(domains, action, category, creds):
 
 def getCustomThreats(creds):
     logging.debug("Attempting to get existing custom threats")
-    output = restclient.sendRest("GET", "/api/settings/custom_threat_intelligence/resources?customerId=", "", creds)  #todo add pagination
+    output = restclient.sendRest("GET", "/api/settings/custom_threat_intelligence/resources?customerId=", "", creds)  # todo add pagination
     records = json.loads(output.text)
     outputlist = []
     for record in records["records"]:

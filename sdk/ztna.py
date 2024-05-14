@@ -120,6 +120,6 @@ def update_vpn(customerid, cookies, headers):
     #print (vpn_config_modify(deploymentcorejson))
     print ('here is the extracted vpn-route ID:')
     print (deploymentcorejson['id'])
-    updatevpnpage = requests.patch('https://' + radar_domain + '/api/gateways/vpn-routes/'+deploymentcorejson['id']+'?customerId=' + customerid, data = (vpn_config_modify(deploymentcorejson)), headers=headers, cookies = cookies)                                   
+    updatevpnpage = requests.patch('https://' + radar_domain + '/api/gateways/vpn-routes/'+deploymentcorejson['id']+'?customerId=' + customerid, data = (vpn_config_modify(deploymentcorejson)), headers=headers, cookies = cookies)
     print (updatevpnpage)
 '''
