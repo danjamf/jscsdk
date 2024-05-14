@@ -9,7 +9,9 @@ def validate_hostname(domain, creds):
     basevalidateconfig = '{"hostname":"'+domain+'"}'
     creds['payload'] = basevalidateconfig
     postresponse = restclient.sendRest(
-        "POST", "/gate/traffic-routing-service/v2/apps/hostnames/validate?customerId=", "", creds)
+        "POST",
+        "/gate/traffic-routing-service/v2/apps/hostnames/validate?customerId=",
+        "", creds)
     # print (postresponse.text)
     x = json.loads(postresponse.text)
     if (x['conflict'] == "NONE"):
@@ -23,9 +25,9 @@ def validate_hostname(domain, creds):
 def list_routes(creds):
     logging.debug('Attempting to list all VPN Routes')
     routesresponse = restclient.sendRest(
-        'GET', '/api/gateways/vpn-routes?customerId=', '&view=deployments_with_status', creds)
+        'GET', '/api/gateways/vpn-routes?customerId=',
+        '&view=deployments_with_status', creds)
 
-    # routesresponse = requests.get('https://' + radar_domain + '/api/gateways/vpn-routes?customerId='+customerid+'&view=deployments_with_status', headers=headers, cookies = cookies)
     logging.debug(routesresponse.text)
     routesjson = json.loads(routesresponse.text)
     logging.debug(len(routesjson))
@@ -45,9 +47,8 @@ def list_apps(creds):
 def find_routes(matchid, creds):
     logging.debug('Attempting to list all VPN Routes')
     routesresponse = restclient.sendRest(
-        'GET', '/api/gateways/vpn-routes?customerId=', '&view=deployments_with_status', creds)
-
-    # routesresponse = requests.get('https://' + radar_domain + '/api/gateways/vpn-routes?customerId='+customerid+'&view=deployments_with_status', headers=headers, cookies = cookies)
+        'GET', '/api/gateways/vpn-routes?customerId=',
+        '&view=deployments_with_status', creds)
     logging.debug(routesresponse.text)
     routesjson = json.loads(routesresponse.text)
     logging.debug(len(routesjson))
@@ -61,7 +62,8 @@ def find_routes(matchid, creds):
 def delete_app(appid, appname, creds):
     logging.debug('Delete app id ' + appid)
     routesresponse = restclient.sendRest(
-        'DELETE', '/api/app-definitions/' + appid + '?customerId=', '&appName=' + appname, creds)
+        'DELETE', '/api/app-definitions/' + appid +
+        '?customerId=', '&appName=' + appname, creds)
     return (routesresponse)
 
 
@@ -71,7 +73,7 @@ def create_app(appname, domains, routeid, creds):
                                '","categoryName":"Uncategorized","hostnames":["testetestset.com"],"bareIps":[],"routing":{"type":"CUSTOM","routeId":"b226","dnsIpResolutionType":"IPv6"},"assignments":{"inclusions":{"allUsers":true,"groups":[]}},"security":{"riskControls":{"enabled":false,"levelThreshold":"HIGH","notificationsEnabled":true},"dohIntegration":{"blocking":false,"notificationsEnabled":true},"deviceManagementBasedAccess":{"enabled":false,"notificationsEnabled":true}}}')
     logging.debug('attempting to modify: ' + baseappconfig['hostnames'][0])
     for index, domain in enumerate(domains):
-        if index == 0:  # bit of a hack. Swap out the first one, but for any other we append
+        if index == 0:  # bit of a hack. Swap out the first one,
             baseappconfig['hostnames'][index] = domain
         else:
             baseappconfig['hostnames'].append(domain)
@@ -82,7 +84,8 @@ def create_app(appname, domains, routeid, creds):
     baseappconfig = json.dumps(baseappconfig)
     creds['payload'] = baseappconfig
     postresponse = restclient.sendRest(
-        'POST', '/api/app-definitions?customerId=', '&appName=' + appname, creds)
+        'POST', '/api/app-definitions?customerId=', '&appName=' +
+        appname, creds)
 
     logging.debug(postresponse.text)
     return (postresponse)
