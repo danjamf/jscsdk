@@ -61,7 +61,7 @@ def delete_app(appid, appname, creds):
 
 
 def create_app(appname, domains, routeid, creds):
-    logging.debug('Creating app config for domains on routeid ' +routeid)
+    logging.debug('Creating app config for domains on routeid ' + routeid)
     baseappconfig = json.loads('{"type":"ENTERPRISE","name":"'+appname+'","categoryName":"Uncategorized","hostnames":["testetestset.com"],"bareIps":[],"routing":{"type":"CUSTOM","routeId":"b226","dnsIpResolutionType":"IPv6"},"assignments":{"inclusions":{"allUsers":true,"groups":[]}},"security":{"riskControls":{"enabled":false,"levelThreshold":"HIGH","notificationsEnabled":true},"dohIntegration":{"blocking":false,"notificationsEnabled":true},"deviceManagementBasedAccess":{"enabled":false,"notificationsEnabled":true}}}')
     logging.debug('attempting to modify: ' + baseappconfig['hostnames'][0])
     for index, domain in enumerate(domains):
@@ -74,7 +74,7 @@ def create_app(appname, domains, routeid, creds):
     logging.debug('new config: ' + json.dumps(baseappconfig))
     baseappconfig = json.dumps(baseappconfig)
     creds['payload'] = baseappconfig
-    postresponse = restclient.sendRest('POST' , '/api/app-definitions?customerId=', '&appName=' + appname, creds)
+    postresponse = restclient.sendRest('POST', '/api/app-definitions?customerId=', '&appName=' + appname, creds)
 
     logging.debug(postresponse.text)
     return (postresponse)
@@ -119,7 +119,7 @@ def update_vpn(customerid, cookies, headers):
     print (deploymentcorejson)
     #print (vpn_config_modify(deploymentcorejson))
     print ('here is the extracted vpn-route ID:')
-    print (deploymentcorejson['id']) 
+    print (deploymentcorejson['id'])
     updatevpnpage = requests.patch('https://' + radar_domain + '/api/gateways/vpn-routes/'+deploymentcorejson['id']+'?customerId=' + customerid, data = (vpn_config_modify(deploymentcorejson)), headers=headers, cookies = cookies)                                   
     print (updatevpnpage)
 '''

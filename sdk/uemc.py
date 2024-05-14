@@ -9,7 +9,7 @@ def create_uemc(domain, clientId, clientSecret, creds):
     newconfig["url"] = domain
     newconfig["deviceSyncAuth"]["clientId"] = clientId
     newconfig["deviceSyncAuth"]["clientSecret"] = clientSecret
-    creds["payload"] = json.dumps(newconfig) 
+    creds["payload"] = json.dumps(newconfig)
     response = restclient.sendRestUEMCendpoints("PUT", "/gate/connector-service/v1/config/", "/emm-server?", creds)
     if response.status_code == 200:
         return response
