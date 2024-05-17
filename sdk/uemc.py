@@ -4,7 +4,18 @@ import logging
 
 
 def create_uemc(domain, clientId, clientSecret, creds):
-    baseconfig = '{"url":"domain","authStrategy":"JAMF_PRO_OAUTH","deviceSyncAuth":{"clientId":"clientid","clientSecret":"secret"},"isoCountry":"us","vendor":"JAMF_PRO"}'
+    baseconfig = '''
+{
+    "url": "domain",
+    "authStrategy": "JAMF_PRO_OAUTH",
+    "deviceSyncAuth": {
+        "clientId": "clientid",
+        "clientSecret": "secret"
+    },
+    "isoCountry": "us",
+    "vendor": "JAMF_PRO"
+}
+'''
     newconfig = json.loads(baseconfig)
     newconfig["url"] = domain
     newconfig["deviceSyncAuth"]["clientId"] = clientId
