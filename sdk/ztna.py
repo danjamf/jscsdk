@@ -69,8 +69,44 @@ def delete_app(appid, appname, creds):
 
 def create_app(appname, domains, routeid, creds):
     logging.debug('Creating app config for domains on routeid ' + routeid)
-    baseappconfig = json.loads('{"type":"ENTERPRISE","name":"'+appname +
-                               '","categoryName":"Uncategorized","hostnames":["testetestset.com"],"bareIps":[],"routing":{"type":"CUSTOM","routeId":"b226","dnsIpResolutionType":"IPv6"},"assignments":{"inclusions":{"allUsers":true,"groups":[]}},"security":{"riskControls":{"enabled":false,"levelThreshold":"HIGH","notificationsEnabled":true},"dohIntegration":{"blocking":false,"notificationsEnabled":true},"deviceManagementBasedAccess":{"enabled":false,"notificationsEnabled":true}}}')
+    baseappconfigstring = '''{
+        "type": "ENTERPRISE",
+        "name": "<appname>",
+        "categoryName": "Uncategorized",
+        "hostnames": [
+            "domainplaceholder.com"
+        ],
+        "bareIps": [],
+        "routing": {
+            "type": "CUSTOM",
+            "routeId": "xxxx",
+            "dnsIpResolutionType": "IPv6"
+        },
+        "assignments": {
+            "inclusions": {
+                "allUsers": true,
+                "groups": []
+            }
+        },
+        "security": {
+            "riskControls": {
+                "enabled": false,
+                "levelThreshold": "HIGH",
+                "notificationsEnabled": true
+            },
+            "dohIntegration": {
+                "blocking": false,
+                "notificationsEnabled": true
+            },
+            "deviceManagementBasedAccess": {
+                "enabled": false,
+                "notificationsEnabled": true
+            }
+        }
+    }'''
+    formatted_json = baseappconfigstring.replace('<appname>', appname)
+    baseappconfig = json.loads(formatted_json)
+
     logging.debug('attempting to modify: ' + baseappconfig['hostnames'][0])
     for index, domain in enumerate(domains):
         if index == 0:  # bit of a hack. Swap out the first one,
