@@ -3,6 +3,7 @@ from . import customthreat
 from . import ztna
 from . import uemc
 from . import idp
+from . import devices
 import logging
 
 
@@ -16,10 +17,22 @@ class JSC:
         self.ztna = self.ztnaclass(self.creds)
         self.uemc = self.uemcclass(self.creds)
         self.idp = self.idpclass(self.creds)
+        self.devices = self.devicesclass(self.creds)
         logging.basicConfig(
             level=loglevel, format='%(asctime)s - %(levelname)s - %(message)s')
         self.logging = logging.getLogger(__name__)
         self.logging.info("auth completed")
+
+    class devicesclass:
+        def __init__(self, creds) -> None:
+            self.creds = creds
+            self.devicesimport = devices
+
+        def delete(self, device_id):
+            return (self.devicesimport.delete_device(device_id, self.creds))
+
+        def search(self, search_term):
+            return (self.devicesimport.search_device(search_term, self.creds))
 
     class uemcclass:
         def __init__(self, creds) -> None:
